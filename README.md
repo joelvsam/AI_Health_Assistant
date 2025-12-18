@@ -1,6 +1,6 @@
 # 🏥 AI-Powered Personal Health & Medical Planner
 
-A GenAI Bootcamp project focused on building a **HealthTech solution** that helps users manage medicines, understand medical documents, and access reliable health education — all in one place.
+A project focused on building a **HealthTech solution** that helps users manage medicines, understand medical documents, and access reliable health education — all in one place.
 
 > ⚠️ **Note:** This system provides **non-diagnostic guidance only** and does not replace professional medical advice.
 
@@ -65,7 +65,7 @@ The **AI-Powered Personal Health & Medical Planner** is designed to support indi
 
 #### 🎥 Video-Based Learning
 
-* Uses trusted medical YouTube content (e.g., Joel’s explainers).
+* Uses trusted medical YouTube content.
 * **Video Summarization Model**:
 
   * Converts long medical videos into
