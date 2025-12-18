@@ -1,4 +1,3 @@
-# AI_Health_Assistant
 # 🏥 AI-Powered Personal Health & Medical Planner
 
 A GenAI Bootcamp project focused on building a **HealthTech solution** that helps users manage medicines, understand medical documents, and access reliable health education — all in one place.
