@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from backend.routes.medicines import router as medicine_router
 from backend.database import init_db
 from backend.reminder import start_scheduler
+from backend.routes.documents import router as document_router
 import threading
 
 app = FastAPI(title="AI Health Assistant")
@@ -12,8 +13,9 @@ def startup():
     init_db()
     threading.Thread(target=start_scheduler, daemon=True).start()
 
-# Include medicine routes
+# Include routes
 app.include_router(medicine_router)
+app.include_router(document_router)
 
 # Simple root endpoint
 @app.get("/")
