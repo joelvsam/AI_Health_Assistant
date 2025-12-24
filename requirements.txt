@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+langchain
+openai
+python-multipart
+pymupdf
+schedule
+youtube-transcript-api
