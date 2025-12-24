@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_PATH = "health.db"
+DB_PATH = "backend/medicines.db"
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -10,7 +10,6 @@ def get_connection():
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS medicines (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,6 +19,5 @@ def init_db():
             frequency TEXT NOT NULL
         )
     """)
-
     conn.commit()
     conn.close()
