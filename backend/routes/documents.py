@@ -4,6 +4,7 @@ from PIL import Image
 import pytesseract
 import io
 
+# Set Tesseract path if using Windows
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
@@ -13,6 +14,7 @@ async def upload_document(file: UploadFile = File(...)):
     contents = await file.read()
     extracted_text = ""
 
+    # PDF handling
     if file.content_type == "application/pdf":
         try:
             pdf = fitz.open(stream=contents, filetype="pdf")
@@ -22,6 +24,7 @@ async def upload_document(file: UploadFile = File(...)):
         except Exception:
             raise HTTPException(status_code=400, detail="Invalid PDF file")
 
+    # Image OCR handling
     elif file.content_type.startswith("image/"):
         try:
             image = Image.open(io.BytesIO(contents))
