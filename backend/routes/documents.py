@@ -1,5 +1,7 @@
+# backend/routes/documents.py
 from fastapi import APIRouter, UploadFile, File, HTTPException
-import fitz
+from backend.database import get_connection
+import fitz  # PyMuPDF
 from PIL import Image
 import pytesseract
 import io
@@ -9,6 +11,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
+# POST - Upload document (PDF or image) and save extracted text
 @router.post("/upload")
 async def upload_document(file: UploadFile = File(...)):
     contents = await file.read()
@@ -44,7 +47,40 @@ async def upload_document(file: UploadFile = File(...)):
             detail="No readable text found in document"
         )
 
+    # Save to database
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "CREATE TABLE IF NOT EXISTS documents ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "filename TEXT NOT NULL, "
+        "text TEXT NOT NULL, "
+        "uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+    )
+    cursor.execute(
+        "INSERT INTO documents (filename, text) VALUES (?, ?)",
+        (file.filename, extracted_text.strip())
+    )
+    conn.commit()
+    doc_id = cursor.lastrowid
+    conn.close()
+
     return {
+        "id": doc_id,
         "filename": file.filename,
         "text": extracted_text.strip()[:2000]
     }
+
+# GET - Retrieve document by ID
+@router.get("/{doc_id}")
+def get_document(doc_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, filename, text, uploaded_at FROM documents WHERE id = ?", (doc_id,))
+    doc = cursor.fetchone()
+    conn.close()
+
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    return dict(doc)

@@ -11,3 +11,6 @@ class MedicineUpdate(BaseModel):
     dosage: str | None = None
     time: str | None = None
     frequency: str | None = None
+
+class MedicineNLInput(BaseModel):
+    text: str
