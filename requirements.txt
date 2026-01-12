@@ -12,3 +12,7 @@ pytesseract
 transformers
 torch
 sentencepiece
+passlib[bcrypt]
+python-jose
+langchain-community
+sentence-transformers

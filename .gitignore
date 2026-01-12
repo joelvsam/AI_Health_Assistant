@@ -3,27 +3,45 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
+.venv/
 
-# SQLite database (optional: include if you do not want DB in Git)
-backend/medicines.db
+# Environment variables
+.env
 
-# IDE/editor files
-.vscode/
-.idea/
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Vector database (FAISS)
+app/data/faiss_index/
+app/data/*.faiss
+
+# HuggingFace / Transformers cache
+.cache/
+hf_cache/
+transformers_cache/
+
+# Logs
+*.log
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
+# IDEs
+.vscode/
+.idea/
 
-# Pipenv / Poetry files (if used)
-Pipfile.lock
-poetry.lock
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Environment variables
-.env
+# Build artifacts
+build/
+dist/
+*.egg-info/
