@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - Health Tech</title>
+    <style>
+        /* Reset and basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #34495e;
+        }
+
+        .dashboard {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .search-bar input {
+            width: 70%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #3498db;
+        }
+
+        .patient-card {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .patient-card h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .patient-card p {
+            margin-bottom: 5px;
+        }
+
+        .patient-card textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        .patient-card button {
+            margin-top: 5px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .patient-card button:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Doctor Dashboard</h1>
+        <p>Manage and review patient submissions</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search patients by name...">
+            <button onclick="searchPatient()">Search</button>
+        </div>
+
+        <div id="patientList">
+            <!-- Patient cards will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample patient data (In real app, fetch from backend)
+        const patients = [
+            { name: "John Doe", age: 30, gender: "Male", symptoms: "Fever, cough", notes: "" },
+            { name: "Jane Smith", age: 25, gender: "Female", symptoms: "Headache, nausea", notes: "" },
+            { name: "Michael Brown", age: 40, gender: "Male", symptoms: "Back pain", notes: "" }
+        ];
+
+        const patientList = document.getElementById('patientList');
+
+        function displayPatients(list) {
+            patientList.innerHTML = '';
+            list.forEach((patient, index) => {
+                const card = document.createElement('div');
+                card.classList.add('patient-card');
+                card.innerHTML = `
+                    <h3>${patient.name} (${patient.age} y/o, ${patient.gender})</h3>
+                    <p><strong>Symptoms:</strong> ${patient.symptoms}</p>
+                    <textarea id="note-${index}" placeholder="Add notes or prescription">${patient.notes}</textarea>
+                    <button onclick="saveNote(${index})">Save Note</button>
+                `;
+                patientList.appendChild(card);
+            });
+        }
+
+        function saveNote(index) {
+            const note = document.getElementById(`note-${index}`).value;
+            patients[index].notes = note;
