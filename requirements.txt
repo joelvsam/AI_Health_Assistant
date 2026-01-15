@@ -13,6 +13,8 @@ transformers
 torch
 sentencepiece
 passlib[bcrypt]
+bcrypt<4.0
 python-jose
 langchain-community
 sentence-transformers
+pydantic[email]
