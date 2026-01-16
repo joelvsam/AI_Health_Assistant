@@ -31,10 +31,7 @@ jobs:
 
       - name: Verify backend imports
         run: |
-          python - <<EOF
-          import backend.main
-          print("Backend imports OK")
-          EOF
+          python -c "import backend.main; print('Backend imports OK')"
 
       - name: Build Docker image
         run: |
