@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Set working directory
 WORKDIR /app
+ENV PYTHONPATH=/app
 
 # System dependencies for OCR, PDFs, and ML packages
 RUN apt-get update && apt-get install -y \
@@ -14,6 +15,10 @@ RUN apt-get update && apt-get install -y \
     poppler-utils \
     build-essential \
     libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for caching
@@ -23,8 +28,8 @@ COPY requirements.txt .
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
-COPY backend ./backend
+# Copy all application code
+COPY . .
 
 # Expose FastAPI port
 EXPOSE 8000

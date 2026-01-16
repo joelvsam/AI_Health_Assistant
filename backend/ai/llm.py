@@ -1,5 +1,6 @@
-from langchain.llms import HuggingFacePipeline
 from transformers import pipeline
+from langchain_community.llms import HuggingFacePipeline
+
 
 hf_pipeline = pipeline(
     "text2text-generation",

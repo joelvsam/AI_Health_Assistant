@@ -18,3 +18,5 @@ python-jose
 langchain-community
 sentence-transformers
 pydantic[email]
+pdf2image
+accelerate

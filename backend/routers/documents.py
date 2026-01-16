@@ -3,6 +3,7 @@ import fitz  # PyMuPDF
 from PIL import Image
 import pytesseract
 import io
+from backend.ai.chains import explain_document
 
 # Set Tesseract path if using Windows
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -43,8 +44,11 @@ async def upload_document(file: UploadFile = File(...)):
             status_code=422,
             detail="No readable text found in document"
         )
+    
+    explanation = explain_document(extracted_text)
 
     return {
         "filename": file.filename,
-        "text": extracted_text.strip()[:2000]  # limit for display
+        "text": extracted_text.strip()[:2000],  # limit for display
+        "explanation": explanation
     }
