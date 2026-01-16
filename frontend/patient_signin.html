@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Sign In</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(to right, #c0392b, #7f8c8d); /* Red to gray */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signin-container {
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .signin-container h2 {
+            color: #c0392b;
+            margin-bottom: 20px;
+        }
+
+        .signin-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .signin-container button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #c0392b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .signin-container button:hover {
+            background-color: #e74c3c;
+        }
+
+        .signin-container a {
+            display: block;
+            margin-top: 15px;
+            color: #7f8c8d;
+            text-decoration: none;
+        }
+
+        .signin-container a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 400px) {
+            .signin-container {
+                width: 90%;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <h2>Patient Sign In</h2>
+        <form onsubmit="event.preventDefault(); alert('Signed in successfully!');">
+            <input type="text" placeholder="Patient ID or Email" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+        <a href="#">Forgot Password?</a>
+        <a href="#">New Patient? Register Here</a>
+    </div>
+</body>
+</html>
