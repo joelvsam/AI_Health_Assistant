@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const data = await response.json();
 
         if (response.ok) {
-            document.getElementById("patient-name").textContent = data.email; // Assuming email is the name for now
+            document.getElementById("patient-name").textContent = data.name;
             document.getElementById("patient-email").textContent = data.email;
         } else {
             console.error("Failed to fetch user info:", data);

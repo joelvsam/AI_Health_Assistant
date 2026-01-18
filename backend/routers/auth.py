@@ -18,6 +18,10 @@ class AuthResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
 
 # --------- Dependencies ---------
 
@@ -43,12 +47,12 @@ def register(payload: UserCreate):
 
     create_user(payload)
 
-    token = create_token({"email": payload.email, "role": "user"})
+    token = create_token({"name": payload.name, "email": payload.email, "role": "user"})
     return {"access_token": token}
 
 
 @router.post("/login", response_model=AuthResponse)
-def login(payload: UserCreate):
+def login(payload: LoginRequest):
     user = get_user_for_auth(payload.email)
 
     if not user:
@@ -58,8 +62,7 @@ def login(payload: UserCreate):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     role = "admin" if user["is_admin"] else "user"
-    token = create_token({"email": user["email"], "role": role})
-
+    token = create_token({"name": user["name"], "email": user["email"], "role": role})
     return {"access_token": token}
 
 
