@@ -46,3 +46,16 @@ def get_user_for_auth(email: str) -> dict | None:
         "password": row[2],
         "is_admin": row[3]
     }
+
+def get_user_by_id(user_id: int) -> UserOut | None:
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, email, is_admin FROM users WHERE id = ?",
+        (user_id,)
+    )
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return None
+    return UserOut(id=row[0], email=row[1], is_admin=row[2])

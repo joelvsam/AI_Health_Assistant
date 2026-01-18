@@ -1,12 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, EmailStr
 
-from backend.core.security import create_token, verify_password
-from backend.models.user import UserCreate
+from backend.core.security import create_token, verify_password, decode_token
+from backend.models.user import UserCreate, UserOut
 from backend.crud.user import create_user, get_user_by_email, get_user_for_auth
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 # --------- Schemas ---------
@@ -14,6 +17,20 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 class AuthResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+# --------- Dependencies ---------
+
+def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    user = get_user_by_email(payload["email"])
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+
+    return user
 
 
 # --------- Routes ---------
@@ -44,3 +61,8 @@ def login(payload: UserCreate):
     token = create_token({"email": user["email"], "role": role})
 
     return {"access_token": token}
+
+
+@router.get("/users/me", response_model=UserOut)
+def read_users_me(current_user: UserOut = Depends(get_current_user)):
+    return current_user

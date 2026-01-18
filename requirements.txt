@@ -1,22 +1,36 @@
+# FastAPI backend
 fastapi
 uvicorn
 pydantic
-langchain
-openai
-python-multipart
-pymupdf
-schedule
-youtube-transcript-api
-pillow
-pytesseract
-transformers
-torch
-sentencepiece
+pydantic[email]
+
+# Authentication / Security
 passlib[bcrypt]
 bcrypt<4.0
 python-jose
-langchain-community
-sentence-transformers
-pydantic[email]
+
+# File handling / PDF / OCR
+python-multipart
+pymupdf
 pdf2image
+pillow
+pytesseract
+
+# Task scheduling
+schedule
+
+# YouTube transcripts
+youtube-transcript-api
+
+# LLM & embeddings
+langchain>=1.2.0
+langchain-community
+langchain-huggingface
+openai
+
+# HuggingFace transformers & models
+transformers
+torch
+sentencepiece
+sentence-transformers
 accelerate

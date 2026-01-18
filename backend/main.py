@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import threading
 from backend.routers.medicines import router as medicine_router
 from backend.routers.reminders import router as reminders_router
@@ -11,6 +12,15 @@ from backend.database import init_db
 from backend.reminder import start_scheduler
 
 app = FastAPI(title="AI Health Assistant")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Initialize database on startup
 @app.on_event("startup")
