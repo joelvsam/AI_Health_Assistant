@@ -1,11 +1,12 @@
-from transformers import pipeline
-from langchain_community.llms import HuggingFacePipeline
+from langchain_huggingface import HuggingFaceEndpoint
+from backend.core.config import HUGGINGFACEHUB_API_TOKEN
 
 
-hf_pipeline = pipeline(
-    "text2text-generation",
-    model="google/flan-t5-base",
-    max_length=256
+llm = HuggingFaceEndpoint(
+    repo_id="google/flan-t5-large",
+    huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
+    temperature=0.5,
+    model_kwargs={
+        "max_length": 256
+    }
 )
-
-llm = HuggingFacePipeline(pipeline=hf_pipeline)
