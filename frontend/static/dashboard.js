@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.getElementById("main-content");
+
+    if (menuBtn && sidebar && mainContent) {
+        menuBtn.addEventListener("click", function () {
+            sidebar.classList.toggle("open");
+            mainContent.classList.toggle("shifted");
+        });
+    }
+
     try {
         const response = await fetch("http://localhost:8000/auth/users/me", {
             headers: {

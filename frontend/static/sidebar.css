@@ -1,0 +1,38 @@
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    transition: left 0.3s;
+}
+
+#sidebar.open {
+    left: 0;
+}
+
+#sidebar nav a {
+    display: block;
+    color: #ecf0f1;
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+#main-content {
+    transition: margin-left 0.3s;
+}
+
+#main-content.shifted {
+    margin-left: 250px;
+}
+
+#menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
