@@ -1,10 +1,9 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-
-from backend.ai.llm import llm
-
-
 def get_rag_chain(retriever):
+    # Import llm here to avoid circular imports
+    from backend.ai.llm import llm
+
     prompt = ChatPromptTemplate.from_template(
         """You are a helpful medical assistant.
 Answer the question using ONLY the context below.

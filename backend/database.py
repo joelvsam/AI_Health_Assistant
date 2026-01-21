@@ -42,5 +42,16 @@ def init_db():
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS notifications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        is_read INTEGER DEFAULT 0,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+    """)
+
     conn.commit()
     conn.close()

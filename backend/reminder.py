@@ -7,7 +7,7 @@ def check_medicines():
     try:
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT name, time FROM medicines")
+        cursor.execute("SELECT user_id, name, time FROM medicines")
         medicines = cursor.fetchall()
         conn.close()
     except Exception as e:
@@ -17,7 +17,18 @@ def check_medicines():
     current_time = time.strftime("%H:%M")
     for med in medicines:
         if med["time"] == current_time:
-            print(f"Reminder: Take {med['name']}")
+            try:
+                conn = get_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "INSERT INTO notifications (user_id, message) VALUES (?, ?)",
+                    (med["user_id"], f"Time to take your medicine: {med['name']}")
+                )
+                conn.commit()
+                conn.close()
+                print(f"Reminder for user {med['user_id']}: Take {med['name']}")
+            except Exception as e:
+                print(f"Error creating notification: {e}")
 
 def start_scheduler():
     schedule.every(1).minutes.do(check_medicines)

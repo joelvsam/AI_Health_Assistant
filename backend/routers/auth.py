@@ -45,9 +45,9 @@ def register(payload: UserCreate):
     if get_user_by_email(payload.email):
         raise HTTPException(status_code=400, detail="User already exists")
 
-    create_user(payload)
+    user = create_user(payload)
 
-    token = create_token({"name": payload.name, "email": payload.email, "role": "user"})
+    token = create_token({"sub": str(user.id), "name": user.name, "email": user.email, "role": "user"})
     return {"access_token": token}
 
 
@@ -62,7 +62,7 @@ def login(payload: LoginRequest):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     role = "admin" if user["is_admin"] else "user"
-    token = create_token({"name": user["name"], "email": user["email"], "role": role})
+    token = create_token({"sub": str(user["id"]), "name": user["name"], "email": user["email"], "role": role})
     return {"access_token": token}
 
 

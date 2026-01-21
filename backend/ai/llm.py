@@ -1,12 +1,10 @@
 from langchain_huggingface import HuggingFaceEndpoint
 from backend.core.config import HUGGINGFACEHUB_API_TOKEN
 
-
 llm = HuggingFaceEndpoint(
     repo_id="google/flan-t5-large",
+    task="text2text-generation",  # 🔑 REQUIRED for FLAN-T5
     huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     temperature=0.5,
-    model_kwargs={
-        "max_length": 256
-    }
+    max_new_tokens=256,
 )

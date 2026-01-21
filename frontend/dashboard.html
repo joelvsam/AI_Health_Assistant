@@ -41,13 +41,52 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+
+        #notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        #notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 10px;
+        }
+
+        #notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .notification-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
 
     <aside id="sidebar">
         <nav>
-            <a href="#">Medicines</a>
+            <a href="medicines.html">Medicines</a>
             <a href="#">Reminders</a>
             <a href="#">Documents</a>
             <a href="#" id="logout-btn">Logout</a>
@@ -58,6 +97,11 @@
         <header>
             <button id="menu-btn">☰</button>
             <h1>Patient Dashboard</h1>
+            <div id="notification-bell">
+                <span id="notification-count">0</span>
+                <img src="https://img.icons8.com/material-rounded/24/000000/bell.png" alt="Notifications">
+                <div id="notification-dropdown"></div>
+            </div>
         </header>
 
         <div id="patient-info">
@@ -99,6 +143,15 @@
                         const message = chatInput.value.trim();
 
                         if (!message) return;
+
+                        // Build history from DOM before adding the new message
+                        const history = [];
+                        chatWindow.querySelectorAll(".chat-message").forEach(msgElement => {
+                            history.push({
+                                role: msgElement.classList.contains("user-message") ? "user" : "bot",
+                                content: msgElement.textContent
+                            });
+                        });
 
                         addMessage(message, "user");
                         chatInput.value = "";

@@ -8,6 +8,7 @@ from backend.routers.auth import router as auth_router
 from backend.routers.ai_explain import router as ai_router
 from backend.routers.documents import router as documents_router
 from backend.routers.chat import router as chat_router
+from backend.routers.notifications import router as notifications_router
 from backend.database import init_db
 from backend.reminder import start_scheduler
 
@@ -38,6 +39,7 @@ app.include_router(reminders_router)
 app.include_router(ai_router)
 app.include_router(documents_router)
 app.include_router(chat_router)
+app.include_router(notifications_router)
 
 @app.get("/")
 def root():
