@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatInput = document.getElementById("chat-input");
     const sendBtn = document.getElementById("send-btn");
     const chatMessages = document.getElementById("chat-messages");
+    const loadingIndicator = document.getElementById("loading-indicator"); // Add this line
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         appendMessage(messageText, "user-message");
         chatInput.value = "";
+        loadingIndicator.style.display = "flex"; // Show loading indicator
 
         fetch("http://localhost:8000/ai/explain", {
             method: "POST",
@@ -35,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
+            loadingIndicator.style.display = "none"; // Hide loading indicator
             if (data.explanation) {
                 appendMessage(data.explanation, "ai-message");
             } else {
@@ -43,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => {
             console.error("Error with AI explanation:", error);
+            loadingIndicator.style.display = "none"; // Hide loading indicator
             appendMessage("An error occurred. Please try again later.", "ai-message");
         });
     }
