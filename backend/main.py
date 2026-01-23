@@ -11,6 +11,9 @@ from backend.routers.chat import router as chat_router
 from backend.routers.notifications import router as notifications_router
 from backend.database import init_db
 from backend.reminder import start_scheduler
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 app = FastAPI(title="AI Health Assistant")
 
@@ -41,6 +44,19 @@ app.include_router(documents_router)
 app.include_router(chat_router)
 app.include_router(notifications_router)
 
+# Serve frontend static files
+app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+
+# Serve landing page
 @app.get("/")
-def root():
-    return {"status": "running"}
+async def read_index():
+    return FileResponse('frontend/landing.html')
+
+# Serve other frontend pages
+@app.get("/{catchall:path}")
+async def serve_frontend_pages(catchall: str):
+    file_path = os.path.join("frontend", catchall)
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    # This is a catch-all for API routes that are not found
+    return {"status": "Not Found"}
