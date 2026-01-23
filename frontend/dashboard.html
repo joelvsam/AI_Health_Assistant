@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="static/sidebar.css">
+    <link rel="stylesheet" href="static/chat.css">
     <style>
         /* Basic Reset */
         * {
@@ -131,102 +132,7 @@
     </div>
 
     <script src="static/dashboard.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function initializeChat(token) {
-                const chatForm = document.getElementById("chat-form");
-                const chatInput = document.getElementById("chat-input");
-                const chatWindow = document.getElementById("chat-window");
-
-                if (chatForm) {
-                    chatForm.addEventListener("submit", async function (e) {
-                        e.preventDefault();
-                        const message = chatInput.value.trim();
-
-                        if (!message) return;
-
-                        // Build history from DOM before adding the new message
-                        const history = [];
-                        chatWindow.querySelectorAll(".chat-message").forEach(msgElement => {
-                            history.push({
-                                role: msgElement.classList.contains("user-message") ? "user" : "bot",
-                                content: msgElement.textContent
-                            });
-                        });
-
-                        addMessage(message, "user");
-                        chatInput.value = "";
-
-                        try {
-                            const response = await fetch("http://localhost:8000/chat/", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "Authorization": `Bearer ${token}`,
-                                },
-                                body: JSON.stringify({ query: message }),
-                            });
-
-                            const data = await response.json();
-
-                            if (response.ok) {
-                                addMessage(data.answer, "bot");
-                            } else {
-                                addMessage(`Error: ${data.detail || "Unknown error"}`, "bot");
-                            }
-                        } catch (error) {
-                            console.error("Chat error:", error);
-                            addMessage("An error occurred while chatting.", "bot");
-                        }
-                    });
-                }
-
-                function addMessage(message, sender) {
-                    const messageElement = document.createElement("div");
-                    messageElement.classList.add("chat-message", `${sender}-message`);
-                    messageElement.textContent = message;
-                    chatWindow.appendChild(messageElement);
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }
-            }
-
-            initializeChat(localStorage.getItem("accessToken"));
-        });
-    </script>
+    <script src="static/sidebar.js"></script>
+    <script src="static/chat.js"></script>
 </body>
 </html>
-<style>
-    #chat-window {
-        height: 300px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        margin-bottom: 10px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-    .chat-message {
-        padding: 8px;
-        border-radius: 4px;
-        margin-bottom: 5px;
-        max-width: 80%;
-    }
-    .user-message {
-        background-color: #dcf8c6;
-        align-self: flex-end;
-    }
-    .bot-message {
-        background-color: #f1f0f0;
-        align-self: flex-start;
-    }
-    #chat-form {
-        display: flex;
-    }
-    #chat-input {
-        flex-grow: 1;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 8px;
-    }
-</style>
