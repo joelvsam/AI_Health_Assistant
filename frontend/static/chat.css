@@ -1,12 +1,7 @@
 #chat-container {
     display: flex;
     flex-direction: column;
-    height: 80vh;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 100%;
 }
 
 #chat-window {

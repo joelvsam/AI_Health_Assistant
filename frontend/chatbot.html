@@ -7,14 +7,27 @@
     <link rel="stylesheet" href="static/sidebar.css">
     <link rel="stylesheet" href="static/chat.css">
     <style>
-        body {
-            background: linear-gradient(to right, #c0392b, #7f8c8d);
-            color: #333;
-            padding: 20px;
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent body scrolling */
             font-family: Arial, sans-serif;
         }
 
+        body {
+            background: linear-gradient(to right, #c0392b, #7f8c8d);
+            color: #333;
+        }
+
+        #main-content {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+        }
+
         header {
+            flex-shrink: 0; /* Prevent header from shrinking */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -28,16 +41,16 @@
             color: #2c3e50;
         }
 
-        #main-content {
-            padding: 20px;
-        }
-        
         #chat-section {
+            flex-grow: 1; /* Allow chat section to grow */
+            display: flex;
+            flex-direction: column;
             margin-top: 20px;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 0; /* Important for flex-grow in a flex column */
         }
     </style>
 </head>
