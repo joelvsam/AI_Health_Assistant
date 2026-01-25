@@ -64,13 +64,6 @@ The **AI-Powered Personal Health & Medical Planner** is designed to support indi
   * Short, easy-to-read articles from **trusted medical sources** (e.g., Cleveland Clinic)
   * Doctors’ notes and lifestyle recommendations
 
-#### 🎥 Video-Based Learning
-
-* Uses trusted medical YouTube content.
-* **Video Summarization Model**:
-
-  * Converts long medical videos into
-  * Step-by-step, user-friendly guides
 
 ---
 
@@ -79,21 +72,6 @@ The **AI-Powered Personal Health & Medical Planner** is designed to support indi
 * Retrieval-Augmented Generation (RAG)
 * Large Language Models (LLMs)
 * Medical document parsing & value extraction
-* Video summarization using GenAI
-
----
-
-## 👥 Team Roles
-
-**Team Name: TEAM JAMA**
-*(Derived from team members’ names)*
-
-| Order | Team Member      | Responsibilities                                          |
-| ----- | ---------------- | --------------------------------------------------------- |
-| **J** | **Joel**         | Health Education Hub, APIs, video content & summarization |
-| **A** | **Aqsa**         | AI Chatbot, RAG pipeline, core AI/LLM components          |
-| **M** | **Mazi**         | Health Education Hub, data analysis, data sourcing        |
-| **A** | **Abdul Rahman** | Medicine Manager, frontend development                    |
 
 ---
 
