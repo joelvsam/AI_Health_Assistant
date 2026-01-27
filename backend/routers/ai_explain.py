@@ -7,7 +7,7 @@ router = APIRouter(prefix="/ai", tags=["AI"])
 class ExplainRequest(BaseModel):
     text: str
 
-# Free summarization / explanation model
+
 summarizer = pipeline("summarization", model="google/flan-t5-base")
 
 @router.post("/explain")

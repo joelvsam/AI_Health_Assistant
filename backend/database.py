@@ -1,15 +1,20 @@
+# backend/database.py
+
 import sqlite3
 from backend.core.config import DATABASE_PATH
 
 def get_connection():
+    """Establishes a connection to the SQLite database."""
     conn = sqlite3.connect(DATABASE_PATH)
-    conn.row_factory = sqlite3.Row
+    conn.row_factory = sqlite3.Row  # This allows accessing columns by name
     return conn
 
 def init_db():
+    """Initializes the database by creating tables if they don't exist."""
     conn = get_connection()
     cursor = conn.cursor()
 
+    # Create the 'users' table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,6 +25,7 @@ def init_db():
     )
     """)
 
+    # Create the 'medicines' table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS medicines (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,6 +37,7 @@ def init_db():
     )
     """)
 
+    # Create the 'documents' table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS documents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,6 +49,7 @@ def init_db():
     )
     """)
 
+    # Create the 'notifications' table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS notifications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -1,3 +1,5 @@
+# backend/main.py
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import threading
@@ -15,9 +17,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 
+# Create a FastAPI app instance
 app = FastAPI(title="AI Health Assistant")
 
-# Add CORS middleware
+# Add CORS middleware to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
@@ -26,15 +29,16 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Initialize database on startup
+# Initialize the database on application startup
 @app.on_event("startup")
 def startup():
+    """Initializes the database and starts the reminder scheduler."""
     init_db()
     # Start the reminder scheduler in a background thread
     scheduler_thread = threading.Thread(target=start_scheduler, daemon=True)
     scheduler_thread.start()
 
-# Include routers
+# Include the API routers for different functionalities
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(medicine_router)
@@ -44,19 +48,21 @@ app.include_router(documents_router)
 app.include_router(chat_router)
 app.include_router(notifications_router)
 
-# Serve frontend static files
+# Serve the frontend static files
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
-# Serve landing page
+# Serve the landing page at the root URL
 @app.get("/")
 async def read_index():
+    """Returns the landing page of the frontend."""
     return FileResponse('frontend/landing.html')
 
 # Serve other frontend pages
 @app.get("/{catchall:path}")
 async def serve_frontend_pages(catchall: str):
+    """Serves other frontend HTML pages."""
     file_path = os.path.join("frontend", catchall)
     if os.path.exists(file_path):
         return FileResponse(file_path)
-    # This is a catch-all for API routes that are not found
+    # This is a fallback for any route that is not found
     return {"status": "Not Found"}
