@@ -1,4 +1,9 @@
 # backend/reminder.py
+"""
+This module contains the logic for the medicine reminder feature.
+It uses the `schedule` library to check for medicines that need a reminder at the current time
+and creates a notification for the user.
+"""
 
 import schedule
 import time
@@ -7,7 +12,8 @@ from backend.database import get_connection
 def check_medicines():
     """
     Checks for medicines that need a reminder at the current time
-    and creates a notification for the user.
+    and creates a notification for the user in the database.
+    This function is called by the scheduler every minute.
     """
     medicines = []
     try:
@@ -42,6 +48,7 @@ def check_medicines():
 def start_scheduler():
     """
     Starts a scheduler that runs the check_medicines function every minute.
+    This function is called in a background thread when the application starts.
     """
     schedule.every(1).minutes.do(check_medicines)
 

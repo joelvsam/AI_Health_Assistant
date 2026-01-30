@@ -1,16 +1,28 @@
 # backend/database.py
+"""
+This module handles the database connection and initialization.
+It provides functions to connect to the SQLite database and to create the necessary tables.
+"""
 
 import sqlite3
 from backend.core.config import DATABASE_PATH
 
 def get_connection():
-    """Establishes a connection to the SQLite database."""
+    """
+    Establishes a connection to the SQLite database.
+    
+    Returns:
+        sqlite3.Connection: A connection object to the database.
+    """
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row  # This allows accessing columns by name
     return conn
 
 def init_db():
-    """Initializes the database by creating tables if they don't exist."""
+    """
+    Initializes the database by creating tables if they don't exist.
+    This function should be called once at the startup of the application.
+    """
     conn = get_connection()
     cursor = conn.cursor()
 

@@ -9,15 +9,22 @@ from backend.services.vector_store import create_vector_store
 # Set Tesseract path if using Windows
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
+# Create a new router for document endpoints
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
 def run_rag_chain(text: str):
+    """
+    Run the RAG chain in the background.
+    """
     retriever = create_vector_store(text)
     rag_chain = get_rag_chain(retriever)
     rag_chain.invoke("Explain this document in simple terms")
 
 @router.post("/upload")
 async def upload_document(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    """
+    Upload a document for processing.
+    """
     contents = await file.read()
     extracted_text = ""
 
@@ -51,6 +58,7 @@ async def upload_document(background_tasks: BackgroundTasks, file: UploadFile = 
             detail="No readable text found in document"
         )
     
+    # Run the RAG chain in the background
     background_tasks.add_task(run_rag_chain, extracted_text)
 
     return {

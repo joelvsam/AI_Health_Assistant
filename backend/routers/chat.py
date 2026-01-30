@@ -10,27 +10,35 @@ from backend.ai.llm import llm
 from langchain.prompts import ChatPromptTemplate
 from backend.core.security import get_current_user_id  # Assuming you have this
 
+# Create a new router for chat endpoints
 router = APIRouter()
 
+# Get the vector store for retrieval
 retriever = get_vector_store()
 
 # Store session-based memories
 chat_histories = {}
 
 def get_session_history(session_id: str):
+    """
+    Get the chat history for a given session.
+    """
     if session_id not in chat_histories:
         chat_histories[session_id] = ConversationBufferMemory(
             memory_key="chat_history", return_messages=True
         )
     return chat_histories[session_id]
 
+# Create a prompt template for the chat
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful AI health assistant."),
     ("human", "{input}")
 ])
 
+# Create a runnable for the chat
 runnable = prompt | llm
 
+# Create a runnable with history for the chat
 runnable_with_history = RunnableWithMessageHistory(
     runnable,
     get_session_history,
@@ -40,6 +48,9 @@ runnable_with_history = RunnableWithMessageHistory(
 
 @router.post("/chat/")
 async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
+    """
+    Handle a chat message from the user.
+    """
     try:
         data = await request.json()
         user_input = data.get("query")
@@ -76,4 +87,3 @@ async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-

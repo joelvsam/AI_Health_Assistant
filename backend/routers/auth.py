@@ -6,19 +6,26 @@ from backend.core.security import create_token, verify_password, decode_token
 from backend.models.user import UserCreate, UserOut
 from backend.crud.user import create_user, get_user_by_email, get_user_for_auth
 
-
+# Create a new router for authentication endpoints
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
+# OAuth2 scheme for token-based authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 # --------- Schemas ---------
 
 class AuthResponse(BaseModel):
+    """
+    Response model for authentication endpoints.
+    """
     access_token: str
     token_type: str = "bearer"
 
 class LoginRequest(BaseModel):
+    """
+    Request model for the login endpoint.
+    """
     email: str
     password: str
 
@@ -26,6 +33,9 @@ class LoginRequest(BaseModel):
 # --------- Dependencies ---------
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
+    """
+    Dependency to get the current user from a token.
+    """
     payload = decode_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -41,6 +51,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
 
 @router.post("/register", response_model=AuthResponse)
 def register(payload: UserCreate):
+    """
+    Register a new user.
+    """
     # Check if user exists
     if get_user_by_email(payload.email):
         raise HTTPException(status_code=400, detail="User already exists")
@@ -53,6 +66,9 @@ def register(payload: UserCreate):
 
 @router.post("/login", response_model=AuthResponse)
 def login(payload: LoginRequest):
+    """
+    Log in a user.
+    """
     user = get_user_for_auth(payload.email)
 
     if not user:
@@ -68,4 +84,7 @@ def login(payload: LoginRequest):
 
 @router.get("/users/me", response_model=UserOut)
 def read_users_me(current_user: UserOut = Depends(get_current_user)):
+    """
+    Get the current user's details.
+    """
     return current_user

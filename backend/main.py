@@ -1,4 +1,8 @@
 # backend/main.py
+"""
+This is the main entry point for the AI Health Assistant application.
+It initializes the FastAPI app, includes the API routers, and serves the frontend.
+"""
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,7 +24,8 @@ import os
 # Create a FastAPI app instance
 app = FastAPI(title="AI Health Assistant")
 
-# Add CORS middleware to allow cross-origin requests
+# Add CORS middleware to allow cross-origin requests from any origin.
+# This is useful for development, but should be restricted in production.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
@@ -32,37 +37,47 @@ app.add_middleware(
 # Initialize the database on application startup
 @app.on_event("startup")
 def startup():
-    """Initializes the database and starts the reminder scheduler."""
+    """
+    Initializes the database and starts the reminder scheduler in a background thread.
+    This function is called once when the application starts.
+    """
     init_db()
     # Start the reminder scheduler in a background thread
     scheduler_thread = threading.Thread(target=start_scheduler, daemon=True)
     scheduler_thread.start()
 
-# Include the API routers for different functionalities
-app.include_router(auth_router)
-app.include_router(admin_router)
-app.include_router(medicine_router)
-app.include_router(reminders_router)
-app.include_router(ai_router)
-app.include_router(documents_router)
-app.include_router(chat_router)
-app.include_router(notifications_router)
+# Include the API routers for different functionalities of the application.
+# Each router handles a specific set of endpoints.
+app.include_router(auth_router, prefix="/api", tags=["Authentication"])
+app.include_router(admin_router, prefix="/api", tags=["Admin"])
+app.include_router(medicine_router, prefix="/api", tags=["Medicines"])
+app.include_router(reminders_router, prefix="/api", tags=["Reminders"])
+app.include_router(ai_router, prefix="/api", tags=["AI"])
+app.include_router(documents_router, prefix="/api", tags=["Documents"])
+app.include_router(chat_router, prefix="/api", tags=["Chat"])
+app.include_router(notifications_router, prefix="/api", tags=["Notifications"])
 
-# Serve the frontend static files
+# Serve the frontend static files (CSS, JS, etc.)
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 # Serve the landing page at the root URL
 @app.get("/")
 async def read_index():
-    """Returns the landing page of the frontend."""
+    """
+    Returns the landing page of the frontend.
+    This is the first page the user will see.
+    """
     return FileResponse('frontend/landing.html')
 
 # Serve other frontend pages
 @app.get("/{catchall:path}")
 async def serve_frontend_pages(catchall: str):
-    """Serves other frontend HTML pages."""
+    """
+    Serves other frontend HTML pages based on the path.
+    If the file is not found, it returns a 404 error.
+    """
     file_path = os.path.join("frontend", catchall)
-    if os.path.exists(file_path):
+    if os.path.exists(file_path) and os.path.isfile(file_path):
         return FileResponse(file_path)
     # This is a fallback for any route that is not found
     return {"status": "Not Found"}
