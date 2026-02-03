@@ -6,15 +6,15 @@ from backend.core.security import create_token, verify_password, decode_token
 from backend.models.user import UserCreate, UserOut
 from backend.crud.user import create_user, get_user_by_email, get_user_for_auth
 
-# Create a new router for authentication endpoints
+
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-# OAuth2 scheme for token-based authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-# --------- Schemas ---------
-
+# -----------------------------
+# Schemas
+# -----------------------------
 class AuthResponse(BaseModel):
     """
     Response model for authentication endpoints.
@@ -23,15 +23,12 @@ class AuthResponse(BaseModel):
     token_type: str = "bearer"
 
 class LoginRequest(BaseModel):
-    """
-    Request model for the login endpoint.
-    """
     email: str
     password: str
 
-
-# --------- Dependencies ---------
-
+# -----------------------------
+# Dependencies
+# -----------------------------
 def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
     """
     Dependency to get the current user from a token.
@@ -47,9 +44,11 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
         is_admin=payload.get("role") == "admin"
     )
 
+# -----------------------------
+# Routes
+# -----------------------------
 
-# --------- Routes ---------
-
+# Register new user
 @router.post("/register", response_model=AuthResponse)
 def register(payload: UserCreate):
     """
@@ -61,10 +60,16 @@ def register(payload: UserCreate):
 
     user = create_user(payload)
 
-    token = create_token({"sub": str(user.id), "name": user.name, "email": user.email, "role": "user"})
-    return {"access_token": token}
+    token = create_token({
+        "sub": str(user.id),
+        "name": user.name,
+        "email": user.email,
+        "role": "user"
+    })
 
+    return {"access_token": token, "token_type": "bearer"}
 
+# Login user
 @router.post("/login", response_model=AuthResponse)
 def login(payload: LoginRequest):
     """
@@ -79,10 +84,17 @@ def login(payload: LoginRequest):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     role = "admin" if user["is_admin"] else "user"
-    token = create_token({"sub": str(user["id"]), "name": user["name"], "email": user["email"], "role": role})
-    return {"access_token": token}
 
+    token = create_token({
+        "sub": str(user["id"]),
+        "name": user["name"],
+        "email": user["email"],
+        "role": role
+    })
 
+    return {"access_token": token, "token_type": "bearer"}
+
+# Get current user
 @router.get("/users/me", response_model=UserOut)
 def read_users_me(current_user: UserOut = Depends(get_current_user)):
     """

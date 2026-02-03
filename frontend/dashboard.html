@@ -28,6 +28,7 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         h1 {
@@ -70,6 +71,7 @@
             max-height: 400px;
             overflow-y: auto;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
         }
 
         .notification-item {
@@ -80,10 +82,80 @@
         .notification-item:last-child {
             border-bottom: none;
         }
+
+        #chat-window {
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message {
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #f1f0f0;
+            align-self: flex-start;
+        }
+
+        #chat-form {
+            display: flex;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        #main-content {
+            margin-left: 200px; /* for sidebar */
+        }
+
+        aside#sidebar {
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #2c3e50;
+            padding-top: 20px;
+        }
+
+        aside#sidebar nav a {
+            display: block;
+            padding: 12px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        aside#sidebar nav a:hover {
+            background: #34495e;
+            border-radius: 4px;
+        }
+
+        #upload-result {
+            margin-top: 10px;
+            color: green;
+        }
     </style>
 </head>
 <body>
-
     <aside id="sidebar">
         <nav>
             <a href="medicines.html">Medicines</a>
@@ -117,7 +189,7 @@
                 <input type="file" id="file-input" required>
                 <button type="submit">Upload and Analyze</button>
             </form>
-            <div id="upload-result" style="margin-top: 15px;"></div>
+            <div id="upload-result"></div>
         </div>
 
         <div id="chat-section" style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -131,7 +203,67 @@
     </div>
 
     <script src="static/dashboard.js"></script>
-    <script src="static/sidebar.js"></script>
-    <script src="static/chat.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function initializeChat(token) {
+                const chatForm = document.getElementById("chat-form");
+                const chatInput = document.getElementById("chat-input");
+                const chatWindow = document.getElementById("chat-window");
+
+                if (chatForm) {
+                    chatForm.addEventListener("submit", async function (e) {
+                        e.preventDefault();
+                        const message = chatInput.value.trim();
+
+                        if (!message) return;
+
+                        // Build history from DOM before adding the new message
+                        const history = [];
+                        chatWindow.querySelectorAll(".chat-message").forEach(msgElement => {
+                            history.push({
+                                role: msgElement.classList.contains("user-message") ? "user" : "bot",
+                                content: msgElement.textContent
+                            });
+                        });
+
+                        addMessage(message, "user");
+                        chatInput.value = "";
+
+                        try {
+                            const response = await fetch("http://localhost:8000/chat/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${token}`,
+                                },
+                                body: JSON.stringify({ query: message }),
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                                addMessage(data.answer, "bot");
+                            } else {
+                                addMessage(`Error: ${data.detail || "Unknown error"}`, "bot");
+                            }
+                        } catch (error) {
+                            console.error("Chat error:", error);
+                            addMessage("An error occurred while chatting.", "bot");
+                        }
+                    });
+                }
+
+                function addMessage(message, sender) {
+                    const messageElement = document.createElement("div");
+                    messageElement.classList.add("chat-message", `${sender}-message`);
+                    messageElement.textContent = message;
+                    chatWindow.appendChild(messageElement);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }
+            }
+
+            initializeChat(localStorage.getItem("accessToken"));
+        });
+    </script>
 </body>
 </html>
