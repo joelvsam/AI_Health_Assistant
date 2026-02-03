@@ -40,11 +40,12 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = get_user_by_email(payload["email"])
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-
-    return user
+    return UserOut(
+        id=int(payload["sub"]),
+        name=payload["name"],
+        email=payload["email"],
+        is_admin=payload.get("role") == "admin"
+    )
 
 
 # --------- Routes ---------

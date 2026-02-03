@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
+    console.log("Dashboard script loaded");
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
@@ -7,13 +8,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/auth/users/me", {
+        const response = await fetch("http://localhost:8000/api/auth/users/me", {
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
         });
 
         const data = await response.json();
+        console.log(data);
 
         if (response.ok) {
             document.getElementById("patient-name").textContent = data.name;
