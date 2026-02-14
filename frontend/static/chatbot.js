@@ -27,19 +27,19 @@ document.addEventListener("DOMContentLoaded", function () {
         chatInput.value = "";
         loadingIndicator.style.display = "flex"; // Show loading indicator
 
-        fetch("http://localhost:8000/ai/explain", {
+        fetch("http://localhost:8000/api/chat/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
-            body: JSON.stringify({ text: messageText }),
+            body: JSON.stringify({ query: messageText }),
         })
         .then(response => response.json())
         .then(data => {
             loadingIndicator.style.display = "none"; // Hide loading indicator
-            if (data.explanation) {
-                appendMessage(data.explanation, "ai-message");
+            if (data.answer) {
+                appendMessage(data.answer, "ai-message");
             } else {
                 appendMessage("Sorry, I couldn't process that.", "ai-message");
             }

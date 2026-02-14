@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             resultDiv.innerHTML = "<p>Uploading and analyzing...</p>";
 
             try {
-                const response = await fetch("http://localhost:8000/documents/upload", {
+                const response = await fetch("http://localhost:8000/api/documents/upload", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${token}`,

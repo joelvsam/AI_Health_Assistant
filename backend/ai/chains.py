@@ -6,7 +6,12 @@ In this case, we are using a Retrieval-Augmented Generation (RAG) chain.
 """
 
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
+
+def _format_docs(docs) -> str:
+    if not docs:
+        return ""
+    return "\n\n".join(doc.page_content for doc in docs)
 
 def get_rag_chain(retriever):
     """
@@ -45,7 +50,7 @@ Answer:"""
     # Create the RAG chain by combining the retriever, prompt, and language model
     chain = (
         {
-            "context": retriever,
+            "context": retriever | RunnableLambda(_format_docs),
             "question": RunnablePassthrough(),
         }
         | prompt

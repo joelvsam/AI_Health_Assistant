@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const medicineForm = document.getElementById("medicine-form");
     const medicinesTable = document.getElementById("medicines-table").getElementsByTagName("tbody")[0];
     const token = localStorage.getItem("accessToken");
+    const apiBase = "/api";
 
     if (!token) {
         window.location.href = "patient_signin.html";
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const frequency = document.getElementById("frequency").value;
 
         try {
-            const response = await fetch("http://localhost:8000/medicines/", {
+            const response = await fetch(`${apiBase}/medicines/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchMedicines() {
         try {
-            const response = await fetch("http://localhost:8000/medicines/", {
+            const response = await fetch(`${apiBase}/medicines/`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 },
@@ -89,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://localhost:8000/medicines/${medicineId}`, {
+            const response = await fetch(`${apiBase}/medicines/${medicineId}`, {
                 method: 'DELETE',
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -138,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function updateMedicine(medicineId, medicineData) {
         try {
-            const response = await fetch(`http://localhost:8000/medicines/${medicineId}`, {
+            const response = await fetch(`${apiBase}/medicines/${medicineId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

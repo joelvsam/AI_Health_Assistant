@@ -1,84 +1,82 @@
-# 🏥 AI-Powered Personal Health & Medical Planner
+# AI-Powered Personal Health and Medical Planner
 
-A project focused on building a **HealthTech solution** that helps users manage medicines, understand medical documents, and access reliable health education — all in one place.
+A project focused on building a HealthTech solution that helps users manage medicines, understand medical documents, and access reliable health education in one place.
 
-> ⚠️ **Note:** This system provides **non-diagnostic guidance only** and does not replace professional medical advice.
+> Note: This system provides non-diagnostic guidance only and does not replace professional medical advice.
 
+## Project Overview
 
----
+The AI-Powered Personal Health and Medical Planner is designed to support individuals in organizing their healthcare routines and understanding medical information using generative AI. The platform combines reminders, AI-based explanations, and trusted educational content to promote healthier daily habits.
 
-## 🌟 Project Overview
+## Core Features
 
-The **AI-Powered Personal Health & Medical Planner** is designed to support individuals in organizing their healthcare routines and understanding medical information using Generative AI. The platform combines smart reminders, AI-based explanations, and trusted educational content to promote healthier daily habits.
+- Medicine manager for tracking dosage, timing, and frequency
+- AI chat for basic health-related questions (non-diagnostic)
+- Medical document explainer for reports and test results
+- Health education hub with trusted resources
 
----
+## Requirements
 
-## 🚀 Core Features
+- Python 3.10+ for local setup
+- Optional: Docker and Docker Compose
+- Optional: Hugging Face API token for AI features
 
-### 💊 Medicine Manager
+## Installation (Local)
 
-* Users can enter medication details (name, dosage, timing).
-* Automatically schedules reminders in a **Smart Medical Calendar** for:
+1. Create and activate a virtual environment.
 
-  * Medicines
-  * Doctor visits
-  * Health checkups
-  * Lab tests
-* Reminder types include:
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
 
-  * Alarm notifications
-  * Pop-up reminders
-  * Voice-command support
+For macOS or Linux:
 
----
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-### 🤖 AI Chat for Medical Queries
+2. Install dependencies.
 
-* Conversational AI for basic health-related questions.
-* Helps users understand:
+```bash
+pip install -r requirements.txt
+```
 
-  * Symptoms (general guidance)
-  * Medicine instructions
-  * Daily health routines
-* Powered by an **LLM-based Health Assistant** (non-diagnostic).
+3. Configure environment variables.
 
----
+Create a `.env` file in the project root:
 
-### 📄 Medical Document Explainer
+```env
+JWT_SECRET=change-me
+HUGGINGFACEHUB_API_TOKEN=your-token-here
+```
 
-* Users can upload medical reports or test results.
-* AI explains reports in **simple, easy-to-understand language**.
-* **Document Understanding Model**:
+4. Run the backend.
 
-  * Extracts key medical values
-  * Explains what those values indicate
-* Includes **Source Verification Checks** to ensure reliability.
+```bash
+uvicorn backend.main:app --reload
+```
 
----
+5. Open the app in your browser:
 
-### 📚 Health Education Hub
+```
+http://localhost:8000
+```
 
-* Central hub for learning healthy practices.
-* Includes:
+## Installation (Docker)
 
-  * Short, easy-to-read articles from **trusted medical sources** (e.g., Cleveland Clinic)
-  * Doctors’ notes and lifestyle recommendations
+```bash
+docker compose up --build
+```
 
+Then open:
 
----
+```
+http://localhost:8000
+```
 
-## 🧠 AI Components
+## Notes
 
-* Retrieval-Augmented Generation (RAG)
-* Large Language Models (LLMs)
-* Medical document parsing & value extraction
-
----
-
-## 🎯 Goal
-
-To create a **user-friendly, AI-powered health assistant** that improves personal healthcare organization, medical literacy, and daily wellness — while maintaining ethical, safe, and responsible AI use.
-
----
-
-✨ *Built for the GenAI Bootcamp with a focus on impact, usability, and trust.*
+- The SQLite database is stored at `backend/healthhub.db`.
+- To reset data, stop the app and delete `backend/healthhub.db`.

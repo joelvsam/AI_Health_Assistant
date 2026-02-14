@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, BackgroundTasks
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import fitz  # PyMuPDF
 from PIL import Image
 import pytesseract
@@ -12,16 +12,17 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 # Create a new router for document endpoints
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
-def run_rag_chain(text: str):
+def run_rag_chain(text: str) -> str:
     """
-    Run the RAG chain in the background.
+    Run the RAG chain and return an explanation.
     """
-    retriever = create_vector_store(text)
-    rag_chain = get_rag_chain(retriever)
-    rag_chain.invoke("Explain this document in simple terms")
+    store = create_vector_store(text)
+    rag_chain = get_rag_chain(store.as_retriever())
+    result = rag_chain.invoke("Explain this document in simple terms")
+    return getattr(result, "content", result)
 
 @router.post("/upload")
-async def upload_document(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+async def upload_document(file: UploadFile = File(...)):
     """
     Upload a document for processing.
     """
@@ -58,12 +59,14 @@ async def upload_document(background_tasks: BackgroundTasks, file: UploadFile = 
             detail="No readable text found in document"
         )
     
-    # Run the RAG chain in the background
-    background_tasks.add_task(run_rag_chain, extracted_text)
+    try:
+        explanation = run_rag_chain(extracted_text)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to process document: {exc}")
 
     return {
         "filename": file.filename,
         "text": extracted_text.strip()[:2000],  # limit for display
-        "explanation": "Your document is being processed. You will be notified when it is ready.",
+        "explanation": explanation,
         "indexed_for_rag": True
     }

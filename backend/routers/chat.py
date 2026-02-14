@@ -13,9 +13,6 @@ from backend.core.security import get_current_user_id  # Assuming you have this
 # Create a new router for chat endpoints
 router = APIRouter()
 
-# Get the vector store for retrieval
-retriever = get_vector_store()
-
 # Store session-based memories
 chat_histories = {}
 
@@ -62,11 +59,12 @@ async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
         config = {"configurable": {"session_id": session_id}}
 
         # Use retrieval QA if documents are available
-        if retriever and getattr(retriever, "index", None) and retriever.index.ntotal > 0:
+        store = get_vector_store()
+        if store and getattr(store, "index", None) and store.index.ntotal > 0:
             qa_chain = RetrievalQA.from_chain_type(
                 llm=llm,
                 chain_type="stuff",
-                retriever=retriever,
+                retriever=store.as_retriever(),
                 return_source_documents=False
             )
             # Must use invoke for RetrievalQA, not ainvoke with history
