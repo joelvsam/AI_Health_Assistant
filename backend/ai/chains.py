@@ -29,8 +29,8 @@ def get_rag_chain(retriever):
     Returns:
         A RAG chain that can be used to answer questions.
     """
-    # Import llm here to avoid circular imports
-    from backend.ai.llm import llm
+    # Import here to avoid circular imports
+    from backend.ai.llm import get_llm
 
     # Define the prompt template for the RAG chain
     prompt = ChatPromptTemplate.from_template(
@@ -48,6 +48,8 @@ Answer:"""
     )
 
     # Create the RAG chain by combining the retriever, prompt, and language model
+    llm = get_llm()
+
     chain = (
         {
             "context": retriever | RunnableLambda(_format_docs),

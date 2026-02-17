@@ -1,4 +1,5 @@
 from pathlib import Path
+from functools import lru_cache
 import faiss
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -7,9 +8,11 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_huggingface import HuggingFaceEmbeddings
 from backend.core.config import FAISS_PATH
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
+@lru_cache
+def get_embeddings() -> HuggingFaceEmbeddings:
+    return HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
 
 def _split_text(text: str) -> list[str]:
     text_splitter = RecursiveCharacterTextSplitter(
@@ -27,6 +30,7 @@ def _split_text(text: str) -> list[str]:
 
 def create_vector_store(text: str) -> FAISS:
     docs = _split_text(text)
+    embeddings = get_embeddings()
 
     if Path(FAISS_PATH).exists():
         db = FAISS.load_local(
@@ -43,6 +47,7 @@ def create_vector_store(text: str) -> FAISS:
 
 
 def get_vector_store() -> FAISS:
+    embeddings = get_embeddings()
     if Path(FAISS_PATH).exists():
         return FAISS.load_local(
             str(FAISS_PATH),

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from backend.ai.llm import llm
+from backend.ai.llm import get_llm
 
 # Create a new router for AI endpoints
 router = APIRouter(prefix="/ai", tags=["AI"])
@@ -19,6 +19,7 @@ async def explain_document(req: ExplainRequest):
         raise HTTPException(status_code=422, detail="No text provided")
 
     try:
+        llm = get_llm()
         prompt = (
             "You are a helpful medical assistant. "
             "Explain the following text in simple, non-diagnostic terms. "

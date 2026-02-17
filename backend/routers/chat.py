@@ -2,11 +2,12 @@
 
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
+from functools import lru_cache
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import RetrievalQA
 from backend.services.vector_store import get_vector_store
-from backend.ai.llm import llm
+from backend.ai.llm import get_llm
 from langchain.prompts import ChatPromptTemplate
 from backend.core.security import get_current_user_id  # Assuming you have this
 
@@ -26,22 +27,26 @@ def get_session_history(session_id: str):
         )
     return chat_histories[session_id]
 
-# Create a prompt template for the chat
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful AI health assistant."),
-    ("human", "{input}")
-])
+@lru_cache
+def get_runnable():
+    """
+    Lazily build the runnable to avoid model initialization at import time.
+    """
+    llm = get_llm()
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are a helpful AI health assistant."),
+        ("human", "{input}")
+    ])
+    return prompt | llm
 
-# Create a runnable for the chat
-runnable = prompt | llm
-
-# Create a runnable with history for the chat
-runnable_with_history = RunnableWithMessageHistory(
-    runnable,
-    get_session_history,
-    input_messages_key="input",
-    history_messages_key="chat_history",
-)
+def get_runnable_with_history():
+    runnable = get_runnable()
+    return RunnableWithMessageHistory(
+        runnable,
+        get_session_history,
+        input_messages_key="input",
+        history_messages_key="chat_history",
+    )
 
 @router.post("/chat/")
 async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
@@ -57,6 +62,8 @@ async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
             raise HTTPException(status_code=400, detail="No query provided")
 
         config = {"configurable": {"session_id": session_id}}
+
+        llm = get_llm()
 
         # Use retrieval QA if documents are available
         store = get_vector_store()
@@ -79,6 +86,7 @@ async def chat(request: Request, user_id: int = Depends(get_current_user_id)):
             return {"answer": answer}
 
         # Use the runnable with history
+        runnable_with_history = get_runnable_with_history()
         result = await runnable_with_history.ainvoke({"input": user_input}, config=config)
         
         return {"answer": result.content}
