@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from transformers import pipeline
+from backend.ai.llm import llm
 
 # Create a new router for AI endpoints
 router = APIRouter(prefix="/ai", tags=["AI"])
@@ -8,9 +8,6 @@ router = APIRouter(prefix="/ai", tags=["AI"])
 # Define the request model for the explain endpoint
 class ExplainRequest(BaseModel):
     text: str
-
-# Initialize the summarization pipeline
-summarizer = pipeline("summarization", model="google/flan-t5-base")
 
 @router.post("/explain")
 async def explain_document(req: ExplainRequest):
@@ -22,9 +19,14 @@ async def explain_document(req: ExplainRequest):
         raise HTTPException(status_code=422, detail="No text provided")
 
     try:
-        # Summarize / explain in simple terms
-        output = summarizer(req.text, max_length=200, min_length=50, do_sample=False)
-        explanation = output[0]['summary_text']
+        prompt = (
+            "You are a helpful medical assistant. "
+            "Explain the following text in simple, non-diagnostic terms. "
+            "If the text is unclear or incomplete, say so.\n\n"
+            f"Text:\n{req.text}\n\nExplanation:"
+        )
+        result = llm.invoke(prompt)
+        explanation = getattr(result, "content", result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

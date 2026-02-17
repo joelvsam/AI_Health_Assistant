@@ -31,6 +31,12 @@ RUN pip install --upgrade pip \
 # Copy all application code
 COPY . .
 
+# Store the SQLite DB under backend/data so the compose volume persists it.
+# .dockerignore excludes *.db, so remove any stale file before linking.
+RUN mkdir -p /app/backend/data \
+    && rm -f /app/backend/healthhub.db \
+    && ln -s /app/backend/data/healthhub.db /app/backend/healthhub.db
+
 # Expose FastAPI port
 EXPOSE 8000
 
