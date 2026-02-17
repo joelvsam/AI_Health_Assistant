@@ -16,10 +16,10 @@ from backend.routers.documents import router as documents_router
 from backend.routers.chat import router as chat_router
 from backend.routers.notifications import router as notifications_router
 from backend.database import init_db
+from backend.core.config import FRONTEND_DIR, FRONTEND_STATIC_DIR, LANDING_PAGE
 from backend.reminder import start_scheduler
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-import os
 
 # Create a FastAPI app instance
 app = FastAPI(title="AI Health Assistant")
@@ -58,7 +58,7 @@ app.include_router(chat_router, prefix="/api", tags=["Chat"])
 app.include_router(notifications_router, prefix="/api", tags=["Notifications"])
 
 # Serve the frontend static files (CSS, JS, etc.)
-app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory=str(FRONTEND_STATIC_DIR)), name="static")
 
 # Serve the landing page at the root URL
 @app.get("/")
@@ -67,7 +67,7 @@ async def read_index():
     Returns the landing page of the frontend.
     This is the first page the user will see.
     """
-    return FileResponse('frontend/landing.html')
+    return FileResponse(str(LANDING_PAGE))
 
 # Serve other frontend pages
 @app.get("/{catchall:path}")
@@ -76,8 +76,8 @@ async def serve_frontend_pages(catchall: str):
     Serves other frontend HTML pages based on the path.
     If the file is not found, it returns a 404 error.
     """
-    file_path = os.path.join("frontend", catchall)
-    if os.path.exists(file_path) and os.path.isfile(file_path):
-        return FileResponse(file_path)
+    file_path = FRONTEND_DIR / catchall
+    if file_path.exists() and file_path.is_file():
+        return FileResponse(str(file_path))
     # This is a fallback for any route that is not found
     return {"status": "Not Found"}

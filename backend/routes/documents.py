@@ -5,9 +5,11 @@ import fitz  # PyMuPDF
 from PIL import Image
 import pytesseract
 import io
+from backend.core.config import TESSERACT_CMD
 
-# Set Tesseract path if using Windows
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Set Tesseract path if provided (otherwise rely on PATH)
+if TESSERACT_CMD:
+    pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 

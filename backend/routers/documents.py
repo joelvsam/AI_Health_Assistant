@@ -5,9 +5,11 @@ import pytesseract
 import io
 from backend.ai.chains import get_rag_chain
 from backend.services.vector_store import create_vector_store
+from backend.core.config import TESSERACT_CMD
 
-# Set Tesseract path if using Windows
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Set Tesseract path if provided (otherwise rely on PATH)
+if TESSERACT_CMD:
+    pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD
 
 # Create a new router for document endpoints
 router = APIRouter(prefix="/documents", tags=["Documents"])

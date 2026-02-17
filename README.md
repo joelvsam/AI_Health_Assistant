@@ -52,6 +52,17 @@ JWT_SECRET=change-me
 HUGGINGFACEHUB_API_TOKEN=your-token-here
 ```
 
+Optional path overrides (relative to repo root or absolute):
+
+```env
+DATABASE_PATH=backend/healthhub.db
+FAISS_PATH=backend/data/faiss_index
+FRONTEND_DIR=frontend
+FRONTEND_STATIC_DIR=frontend/static
+LANDING_PAGE=frontend/landing.html
+TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe
+```
+
 4. Run the backend.
 
 ```bash
