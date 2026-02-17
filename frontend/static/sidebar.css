@@ -16,10 +16,16 @@
 
 #sidebar nav a {
     display: block;
+    padding: 12px 20px;
     color: #ecf0f1;
     text-decoration: none;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     font-size: 1.2em;
+}
+
+#sidebar nav a:hover {
+    background: #34495e;
+    border-radius: 4px;
 }
 
 #main-content {

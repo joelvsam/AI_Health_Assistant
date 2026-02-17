@@ -1,0 +1,13 @@
+.patient-data h2 {
+    margin-bottom: 15px;
+    color: var(--color-dark);
+}
+
+.patient-card {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.patient-card:last-child {
+    border-bottom: none;
+}

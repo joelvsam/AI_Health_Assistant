@@ -1,85 +1,14 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Medicines</title>
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/layout.css">
     <link rel="stylesheet" href="static/sidebar.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(to right, #c0392b, #7f8c8d);
-            color: #333;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        h1, h2 {
-            color: #2c3e50;
-        }
-
-        #main-content {
-            padding: 20px;
-        }
-
-        #add-medicine-form, #medicines-list {
-            margin-top: 20px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        form input, form button {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        form button {
-            background-color: #2c3e50;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 <body>
-
     <aside id="sidebar">
         <nav>
             <a href="dashboard.html">Dashboard</a>
@@ -91,26 +20,26 @@
         </nav>
     </aside>
 
-    <div id="main-content">
-        <header>
-            <button id="menu-btn">☰</button>
-            <h1>Manage Medicines</h1>
+    <div id="main-content" class="app-main stack">
+        <header class="app-header">
+            <button id="menu-btn">Menu</button>
+            <h1 class="app-title">Manage Medicines</h1>
         </header>
 
-        <div id="add-medicine-form">
+        <section id="add-medicine-form" class="card">
             <h2>Add New Medicine</h2>
-            <form id="medicine-form">
-                <input type="text" id="medicine-name" placeholder="Medicine Name" required>
-                <input type="text" id="dosage" placeholder="Dosage (e.g., 500mg)" required>
-                <input type="text" id="time" placeholder="Time (e.g., 8:00 AM)" required>
-                <input type="text" id="frequency" placeholder="Frequency (e.g., Daily)" required>
-                <button type="submit">Add Medicine</button>
+            <form id="medicine-form" class="form-stack">
+                <input class="form-input" type="text" id="medicine-name" placeholder="Medicine Name" required>
+                <input class="form-input" type="text" id="dosage" placeholder="Dosage (e.g., 500mg)" required>
+                <input class="form-input" type="text" id="time" placeholder="Time (e.g., 8:00 AM)" required>
+                <input class="form-input" type="text" id="frequency" placeholder="Frequency (e.g., Daily)" required>
+                <button class="btn btn-primary" type="submit">Add Medicine</button>
             </form>
-        </div>
+        </section>
 
-        <div id="medicines-list">
+        <section id="medicines-list" class="card">
             <h2>Your Medicines</h2>
-            <table id="medicines-table">
+            <table id="medicines-table" class="table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -124,11 +53,10 @@
                     <!-- Medicine rows will be inserted here -->
                 </tbody>
             </table>
-        </div>
+        </section>
     </div>
 
     <script src="static/medicines.js"></script>
     <script src="static/sidebar.js"></script>
-
 </body>
 </html>

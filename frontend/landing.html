@@ -4,100 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Companion | Smarter Healthcare</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(to right, #c0392b, #7f8c8d);
-            color: black;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cover {
-            text-align: center;
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-        }
-
-        .cover h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-
-        .cover p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            color: #ecf0f1
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .buttons a {
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .patient-btn {
-            background: #c0392b;
-            color: black;
-        }
-
-        .doctor-btn {
-            background: transparent;
-            color: #ecf0f1;
-            border: 2px solid #bdc3c7;
-        }
-
-        .buttons a:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 15px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-    </style>
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/auth.css">
 </head>
-<body>
-
-    <div class="cover">
-        <h1>Healthcare Companion</h1>
-        <p>
-            A smart AI-healthcare platform connecting patients and doctors  
+<body class="page-center">
+    <div class="auth-card auth-card--dark">
+        <h1 class="auth-title">Healthcare Companion</h1>
+        <p class="auth-subtitle">
+            A smart AI-healthcare platform connecting patients and doctors
             for faster, safer, and better health decisions.
         </p>
-
-        <div class="buttons">
-            <a href="patient_signin.html" class="patient-btn">Patient Portal</a>
+        <div class="auth-actions">
+            <a href="patient_signin.html" class="auth-button">Patient Portal</a>
         </div>
     </div>
 
-    <footer>
-        © 2026 JAM Project | All Rights Reserved
+    <footer class="page-footer">
+        Copyright 2026 JAM Project | All Rights Reserved
     </footer>
-
 </body>
 </html>

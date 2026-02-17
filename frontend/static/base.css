@@ -1,0 +1,58 @@
+:root {
+    --color-primary: #c0392b;
+    --color-secondary: #7f8c8d;
+    --color-dark: #2c3e50;
+    --color-light: #ecf0f1;
+    --color-text: #333;
+    --color-card: #fff;
+    --shadow-sm: 0 0 10px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.25);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    color: var(--color-text);
+}
+
+img {
+    max-width: 100%;
+}
+
+.page-center {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 20px;
+}
+
+.page-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    color: var(--color-light);
+}
+
+.page-footer-static {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    color: var(--color-light);
+}

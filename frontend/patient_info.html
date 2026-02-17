@@ -4,155 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Tech Project</title>
-    <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(to right, #c0392b, #7f8c8d);
-            color: #333;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: #2c3e50;
-        }
-
-        form {
-            max-width: 500px;
-            margin: 0 auto 30px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input, form select, form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        form button {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        form button:hover {
-            background-color: #2ecc71;
-        }
-
-        .patient-data {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .patient-data h2 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .patient-card {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/layout.css">
+    <link rel="stylesheet" href="static/patient_info.css">
 </head>
 <body>
+    <div class="app-main">
+        <header class="page-header text-center">
+            <h1 class="app-title">Health Tech Project</h1>
+            <p>Enter patient information below</p>
+        </header>
 
-    <header>
-        <h1>Health Tech Project</h1>
-        <p>Enter patient information below</p>
-    </header>
+        <form id="patientForm" class="card content-narrow form-stack">
+            <label class="form-label" for="name">Full Name:</label>
+            <input class="form-input" type="text" id="name" placeholder="John Doe" required>
 
-    <form id="patientForm">
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" placeholder="John Doe" required>
+            <label class="form-label" for="age">Age:</label>
+            <input class="form-input" type="number" id="age" placeholder="30" required>
 
-        <label for="age">Age:</label>
-        <input type="number" id="age" placeholder="30" required>
+            <label class="form-label" for="gender">Gender:</label>
+            <select class="form-input" id="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
 
-        <label for="gender">Gender:</label>
-        <select id="gender" required>
-            <option value="">Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
+            <label class="form-label" for="symptoms">Symptoms:</label>
+            <textarea class="form-input" id="symptoms" placeholder="Describe symptoms" required></textarea>
 
-        <label for="symptoms">Symptoms:</label>
-        <textarea id="symptoms" placeholder="Describe symptoms" required></textarea>
+            <button class="btn btn-success" type="submit">Submit</button>
+        </form>
 
-        <button type="submit">Submit</button>
-    </form>
-
-    <div class="patient-data">
-        <h2>Submitted Patient Data</h2>
-        <div id="patientList">
-            <!-- Patient cards will appear here -->
+        <div class="patient-data card content-narrow">
+            <h2>Submitted Patient Data</h2>
+            <div id="patientList">
+                <!-- Patient cards will appear here -->
+            </div>
         </div>
+
+        <footer class="page-footer-static">
+            Copyright 2026 JAMA Project | All Rights Reserved
+        </footer>
     </div>
 
-    <script>
-        const form = document.getElementById('patientForm');
-        const patientList = document.getElementById('patientList');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Get form values
-            const name = document.getElementById('name').value;
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
-            const symptoms = document.getElementById('symptoms').value;
-
-            // Create patient card
-            const card = document.createElement('div');
-            card.classList.add('patient-card');
-            card.innerHTML = `
-                <strong>Name:</strong> ${name} <br>
-                <strong>Age:</strong> ${age} <br>
-                <strong>Gender:</strong> ${gender} <br>
-                <strong>Symptoms:</strong> ${symptoms}
-            `;
-
-            // Add to list
-            patientList.appendChild(card);
-
-            // Clear form
-            form.reset();
-        });
-    </script>
-
-    <footer>
-        © 2026 JAMA Project | All Rights Reserved
-    </footer>
-
+    <script src="static/patient_info.js"></script>
 </body>
 </html>
